@@ -6,3 +6,5 @@ Example: Computerphile,https://www.youtube.com/user/Computerphile/videos,2
 ```
 
 I used Cron to schedule the download script to run at 3am daily, and then the encoding script to run at 3pm daily. This gives the downloading script enough time to finish, but there is checking in place to make sure the encoding doesn't start until the download is finished.
+
+Right now I don't think the audio only part is working, because I solely use the combined setting (2). I am going to take a look at that in the coming days.
