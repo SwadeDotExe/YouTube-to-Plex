@@ -1,2 +1,1 @@
-Channel 1 Name,https://www.youtube.com/c/channel1/videos,2
-Channel 2 Name,https://www.youtube.com/c/channel2/videos,2
+Barley Sociable,https://www.youtube.com/c/BarelySociable/videos,2
