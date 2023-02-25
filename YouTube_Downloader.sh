@@ -1,18 +1,19 @@
 #!/bin/bash
 
-WEBHOOK_URL="https://discord.com/api/webhooks/**********************************************"
-SECONDS=0
-
-# Path Variables
-DOWNLOAD_DIR=/path/for/download
-SCRIPT_DIR=/path/for/this/script
-
-trap "exit" INT
+# Read in Variables
+VARS=`cat credentials.txt`
+WEBHOOK_URL=$(echo "$VARS" | cut -d, -f1)
+DOWNLOAD_DIR=$(echo "$VARS" | cut -d, -f2)
+VIDEO_DIR=$(echo "$VARS" | cut -d, -f3)
+PODCAST_DIR=$(echo "$VARS" | cut -d, -f4)
+SCRIPT_DIR=$(echo "$VARS" | cut -d, -f5)
 
 # Send Discord Notification
-PAYLOAD=" { \"content\": \"YouTube-DL started downloading the list of links.\" }"
-
+SECONDS=0
+PAYLOAD=" { \"content\": \"YouTube-DL started encoding the list of links.\" }"
 curl -X POST -H 'Content-Type: application/json' -d "$PAYLOAD" "$WEBHOOK_URL"
+
+trap "exit" INT
 
 # Start loop to read through the links file.
 while read CURRENT; do
@@ -35,7 +36,7 @@ sudo truncate -s 0 $DOWNLOAD_DIR/"$NAME"/status.txt
 sudo echo "downloading" > $DOWNLOAD_DIR/"$NAME"/status.txt
 
 # Downloads all the new videos and stores the video-id in a file.
-sudo yt-dlp -ciw -o $DOWNLOAD_DIR/"$NAME"/"%(playlist_autonumber)s_%(title)s.%(ext)s" $LINK --playlist-reverse --add-metadata -f bestvideo+bestaudio/best --write-thumbnail --embed-thumbnail --merge-output-format mkv --embed-subs --write-auto-sub --download-archive $DOWNLOAD_DIR/"$NAME"/titles.txt
+sudo yt-dlp -ciw -o $DOWNLOAD_DIR/"$NAME"/"%(playlist_autonumber)s_%(title)s.%(ext)s" $LINK --playlist-reverse --add-metadata -f bestvideo+bestaudio/best --write-thumbnail --embed-thumbnail --merge-output-format mkv --embed-subs --write-auto-sub --download-archive $DOWNLOAD_DIR/"$NAME"/titles.txt --cookies /mnt/SSD/Scripts/DormScripts/YouTube_Scripts/YouTubeCookie.txt
 
 # Converts all thumbnails to .JPG
 cd $DOWNLOAD_DIR/"$NAME"/

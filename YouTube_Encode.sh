@@ -1,15 +1,15 @@
 #!/bin/bash
 
-WEBHOOK_URL="https://discord.com/api/webhooks/******************************************"
-SECONDS=0
-
-# Path Variables
-DOWNLOAD_DIR=/path/for/download
-VIDEO_DIR=/path/for/video/storage
-PODCAST_DIR=/path/for/audio/storage
-SCRIPT_DIR=/path/to/this/script
+# Read in Variables
+VARS=`cat credentials.txt`
+WEBHOOK_URL=$(echo "$VARS" | cut -d, -f1)
+DOWNLOAD_DIR=$(echo "$VARS" | cut -d, -f2)
+VIDEO_DIR=$(echo "$VARS" | cut -d, -f3)
+PODCAST_DIR=$(echo "$VARS" | cut -d, -f4)
+SCRIPT_DIR=$(echo "$VARS" | cut -d, -f5)
 
 # Send Discord Notification
+SECONDS=0
 PAYLOAD=" { \"content\": \"YouTube-DL started encoding the list of links.\" }"
 
 curl -X POST -H 'Content-Type: application/json' -d "$PAYLOAD" "$WEBHOOK_URL"
