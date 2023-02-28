@@ -6,7 +6,7 @@ echo "Starting YouTube_Encode.sh"
 yes '' | sed 2q
 
 # Read in Variables
-VARS=`cat credentials.txt`
+VARS=`cat /mnt/SSD/Scripts/GitHub/YouTube-to-Plex/credentials.txt`
 WEBHOOK_URL=$(echo "$VARS" | cut -d, -f1)
 DOWNLOAD_DIR=$(echo "$VARS" | cut -d, -f2)
 VIDEO_DIR=$(echo "$VARS" | cut -d, -f3)
@@ -130,7 +130,7 @@ else
 fi
 
 # Ends the loop.
-done <List_of_Links.txt
+done <$SCRIPT_DIR/List_of_Links.txt
 
 #End timer function
 if (( $SECONDS > 3600 )); then

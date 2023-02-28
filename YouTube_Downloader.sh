@@ -6,7 +6,7 @@ echo "Starting YouTube_Downloader.sh"
 yes '' | sed 2q
 
 # Read in Variables
-VARS=`cat credentials.txt`
+VARS=`cat /mnt/SSD/Scripts/GitHub/YouTube-to-Plex/credentials.txt`
 WEBHOOK_URL=$(echo "$VARS" | cut -d, -f1)
 DOWNLOAD_DIR=$(echo "$VARS" | cut -d, -f2)
 VIDEO_DIR=$(echo "$VARS" | cut -d, -f3)
@@ -73,13 +73,15 @@ while read CURRENT; do
     # Get count of channel videos
     CHANNELNUM=`yt-dlp $LINK -J --flat-playlist | jq ".entries | length"`
     
+    echo "The channel has a total of $CHANNELNUM videos"
+
     # Check to see if any new videos since last update
     if [ "$CHANNELNUM" -gt "$TXTNUM" ]; then
         echo "New videos detected, running download script."
     
 
         #Downloads all the new videos and stores the video-id in a file.
-        sudo yt-dlp -ciw -o $DOWNLOAD_DIR/"$NAME"/"%(playlist_autonumber)s_%(title)s.%(ext)s" $LINK --playlist-reverse --add-metadata -f bestvideo+bestaudio/best --write-thumbnail --embed-thumbnail --merge-output-format mkv --embed-subs --write-auto-sub --download-archive $DOWNLOAD_DIR/"$NAME"/titles.txt --cookies $SCRIPT_DIR/YouTubeCookie.txt --max-downloads 10
+        sudo yt-dlp -ciw -o $DOWNLOAD_DIR/"$NAME"/"%(playlist_autonumber)s_%(title)s.%(ext)s" $LINK --playlist-reverse --add-metadata -f bestvideo+bestaudio/best --write-thumbnail --embed-thumbnail --merge-output-format mkv --embed-subs --write-auto-sub --download-archive $DOWNLOAD_DIR/"$NAME"/titles.txt --cookies $SCRIPT_DIR/YouTubeCookie.txt --max-downloads 5
 
         ################################################
         #   NOTE: Right now yt-dlp is limited to       #
@@ -115,7 +117,7 @@ while read CURRENT; do
     sudo echo "needsencoding" > $DOWNLOAD_DIR/"$NAME"/status.txt
 
 # Ends the loop.
-done <List_of_Links.txt
+done <$SCRIPT_DIR/List_of_Links.txt
 
 #End timer function
 if (( $SECONDS > 3600 )); then
